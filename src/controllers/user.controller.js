@@ -27,7 +27,13 @@ const registerUser = asyncHandler(async (req,res) => {
         throw new apiError(400 , "Some required fields are missing")
     }
 
-    const avatar = await req.files?.avatar[0].path
+    const checkUser = await User.findOne({userName})
+    if(checkUser){
+        throw new apiError(400 , 'user already exists')
+    }
+
+    const avatar =  req.files?.avatar[0].path
+    
     if(!avatar) {
         throw new apiError(400 , 'Failed to fetch the local path of avatar, multer file upload failed')
     }
@@ -37,7 +43,7 @@ const registerUser = asyncHandler(async (req,res) => {
     } catch (err) {
         coverImage = 'cover image upload failed'
     }
-
+    
     const avatarUpload = await uploadOnCloudinary(avatar)
     const coverImageUpload = await uploadOnCloudinary(coverImage)
 
