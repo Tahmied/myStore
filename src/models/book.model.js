@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const bookSchema = new Schema({
     title : {
@@ -23,10 +23,11 @@ const bookSchema = new Schema({
         required : true
     } ,
     author : {
-        type : String
+        type : Schema.Types.ObjectId,
+        ref : "User"
     }
 }, {
     timestamps : true
 })
 
-export const Book = mongoose.model("Book" , bookSchema)
+export const Book = mongoose.model('Book' , bookSchema)
