@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { addBook, allBooks } from '../controllers/book.controller.js'
+import { addBook, allBooks, bookPage } from '../controllers/book.controller.js'
 import { findUserFromCookies } from '../middlewares/auth.middleware.js'
 import { upload } from '../middlewares/multer.middleware.js'
 
@@ -13,5 +13,6 @@ router.route('/add-book').post(findUserFromCookies, upload.fields([{
 }]) , addBook)
 
 router.route('/books').get(allBooks)
+router.route('/:bookId').get(bookPage)
 
 export default router

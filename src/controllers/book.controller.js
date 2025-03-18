@@ -58,5 +58,33 @@ const allBooks = asyncHandler(async (req,res) => {
         new apiResponse(200 , `${bookCount} books are fetched` , book)
     )
 })
-export { addBook, allBooks };
+
+const bookPage = asyncHandler(async (req,res) => {
+    const book = await Book.findById(req.params.bookId)
+    if(!book){
+        throw new apiError(400 , 'unable to find the book id from url')
+    }
+    const bookName = book.title
+    const bookCoverImage = book.bookCover
+    const bookDownloadLink = book.pdf
+    const bookPageCount = book.pageCount
+    const description = book.bookDescription
+    const authorName = book.author
+
+    const bookDetails = {
+        Name : bookName,
+        CoverImage : bookCoverImage,
+        downloadLink : bookDownloadLink,
+        pages : bookPageCount,
+        description : description,
+        author : authorName
+    }
+    return res
+    .status(200)
+    .json(
+        new apiResponse(200 , 'Book details fetched successfully' , bookDetails)
+    )
+})
+
+export { addBook, allBooks, bookPage };
 
