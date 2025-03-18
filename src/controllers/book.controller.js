@@ -16,7 +16,6 @@ const addBook = asyncHandler(async (req,res) => {
     }
 
     const checkBook = await Book.findOne({title : title})
-    console.log(`New one - ${title} ,  found one - ${checkBook.title}`);
     if(checkBook) {
         throw new apiError(400 , 'this book is already added')
     }

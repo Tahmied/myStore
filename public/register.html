@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Registration Form</title>
+    <link rel="stylesheet" href="register-style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="form-title">Create Your Account</h1>
+        <form class="form-grid">
+            <!-- Username -->
+            <div class="form-group full-width">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+
+            <!-- Name Fields -->
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group full-width">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group full-width">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <!-- Avatar Upload -->
+            <div class="form-group">
+                <label>Avatar Image</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" class="file-upload-input" accept="image/*">
+                    <div class="file-upload-button">
+                        <span>Choose File</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cover Image Upload -->
+            <div class="form-group">
+                <label>Cover Image</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" class="file-upload-input" accept="image/*">
+                    <div class="file-upload-button">
+                        <span>Choose File</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group full-width">
+                <label for="description">Description</label>
+                <textarea id="description" rows="4"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group full-width">
+                <button type="submit" class="submit-btn">Create Account</button>
+            </div>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="#">Login here</a>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.file-upload-input').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const fileName = this.files[0]?.name || 'No file selected';
+                const wrapper = this.closest('.file-upload-wrapper');
+                let display = wrapper.querySelector('.file-name');
+                
+                if (!display) {
+                    display = document.createElement('span');
+                    display.className = 'file-name';
+                    wrapper.appendChild(display);
+                }
+                
+                display.textContent = fileName;
+                wrapper.classList.add('file-selected');
+                setTimeout(() => wrapper.style.animation = 'bounce 0.4s ease', 10);
+            });
+        });
+        </script>
+</body>
+</html>

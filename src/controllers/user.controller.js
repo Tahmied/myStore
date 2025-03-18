@@ -1,3 +1,4 @@
+import { Book } from "../models/book.model.js";
 import { User } from "../models/user.model.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
@@ -135,5 +136,40 @@ const logOutUser = asyncHandler(async (req,res) => {
     )
 })
 
-export { loginUser, logOutUser, registerUser };
+const userProfile = asyncHandler(async (req,res) => {
+    const user = await User.findById(req.params.userId).select('-password -refreshToken')
+    if(!user){
+        throw new apiError(401, 'unable to find the user')
+    }
+
+    const firstName = user.firstName
+    const secondName = user.secondName
+    const fullName = `${firstName} ${secondName}`
+    const profilePic = user.avatar
+    const coverPic = user.coverImage
+    const profileBio = user.description
+
+    if([firstName, secondName, profilePic, coverPic, profileBio].some((e)=>!e)){
+        throw new apiError(400 , 'unable to fetch user details')
+    }
+
+    const publishedBooks = await Book.find({author:req.params.userId})
+
+    const profile = {
+        name : fullName,
+        profilePic : profilePic,
+        coverPic : coverPic,
+        bio : profileBio,
+        books : publishedBooks
+    }
+
+    return res
+    .status(200)
+    .json(
+        new apiResponse(200 , 'user detailes fetched successfully' , profile)
+    )
+
+})
+
+export { loginUser, logOutUser, registerUser, userProfile };
 
