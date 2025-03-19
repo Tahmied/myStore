@@ -61,9 +61,48 @@ const allBooks = asyncHandler(async (req,res) => {
 
 const bookPage = asyncHandler(async (req,res) => {
     const book = await Book.findById(req.params.bookId)
+    const {addToCollection} = req.body
+    const user = req.user
+    let inColection;
+    let collection;
     if(!book){
         throw new apiError(400 , 'unable to find the book id from url')
     }
+
+    if(user.bookCollection.includes(req.params.bookId)){
+        inColection = true
+    } else {
+        inColection = false
+    }
+
+    if(addToCollection !== undefined) {
+        if(addToCollection !== 1 && addToCollection !== 0) {
+            throw new apiError(400 , 'the value of addToCollection must be 1 or 0')
+        }
+    }
+
+    if(inColection == false) {
+        if(addToCollection === 1) {
+            user.bookCollection.push(req.params.bookId)
+            await user.save()
+            collection = `added to the collection of the user`
+        } else {
+            collection = `book is not in the collection and the value of addToCollection is 0, so didn't remove from the collection`
+        }
+    }
+    
+    
+    if(inColection == true){
+        if(addToCollection === 0) {
+            const bookIndex = user.bookCollection.indexOf(req.params.bookId)
+            user.bookCollection.splice(bookIndex , 1)
+            await user.save()
+            collection = `removed from collection`
+        } else {
+            collection = `book is already in the collection and the value of addToCollection is 1, so didn't added to the collection `
+        }
+    }
+   
     const bookName = book.title
     const bookCoverImage = book.bookCover
     const bookDownloadLink = book.pdf
@@ -77,7 +116,9 @@ const bookPage = asyncHandler(async (req,res) => {
         downloadLink : bookDownloadLink,
         pages : bookPageCount,
         description : description,
-        author : authorName
+        author : authorName,
+        wasInCollection : inColection,
+        collectionUpdate : collection
     }
     return res
     .status(200)

@@ -160,7 +160,8 @@ const userProfile = asyncHandler(async (req,res) => {
         profilePic : profilePic,
         coverPic : coverPic,
         bio : profileBio,
-        books : publishedBooks
+        books : publishedBooks,
+        collection : user.bookCollection
     }
 
     return res

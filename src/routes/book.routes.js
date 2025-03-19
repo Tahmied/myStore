@@ -13,6 +13,6 @@ router.route('/add-book').post(findUserFromCookies, upload.fields([{
 }]) , addBook)
 
 router.route('/books').get(allBooks)
-router.route('/:bookId').get(bookPage)
+router.route('/:bookId').post(findUserFromCookies,bookPage)
 
 export default router
